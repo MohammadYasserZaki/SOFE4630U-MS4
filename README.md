@@ -347,9 +347,21 @@ The output would be similar to
 
 ## Design
 
-The [dataset](https://github.com/GeorgeDaoud3/SOFE4630U-Design/blob/main/README.md#the-dataset-description) was updated to include more information for the final step to solve the occluded pedestrian problem. Seven microservices are designed to solve the problem. The description of the microservices is given in [the milestone 4 section](https://github.com/GeorgeDaoud3/SOFE4630U-Design/blob/main/README.md#milestone-4).
+In milestone 2, you designed a Dataflow job to preprocess the smart meter measurements. In this milestone, you will implement the same preprocessing but using microservices communicating using a single Google Pub/sub-topic.
 
-Note that the microservices logic has already been implemented. Your task is to update them only to establish the communication between the microservices using a shared bus and to create a producer and consumer.
+The list of microservices are
+1. FilterReading: Eliminate records with missing measurements (containing None).
+2. ConvertReading: convert the pressure from kPa to psi and the temperature from Celsius to Fahrenheit using the following equations
+
+𝑃(𝑝𝑠𝑖) = 𝑃(𝑘𝑃𝑎)/6.895
+
+𝑇(𝐹) = 𝑇(𝐶)∗1.8+32
+
+Also, a [BigQuerry subscription](https://cloud.google.com/pubsub/docs/bigquery) (similar to Kafka Connector) should be implemented to store the results in a bigQuerry Table automatically.
+
+**Note**: the microservices in the design part is simpler than those in the voting system as they need no datastorage
+
+<img src="figures/design.jpg" alt="the design architecture" width="640" />
 
 ## Discussion:
 
@@ -359,5 +371,5 @@ Compare the advantages and disadvantages of using Dataflow vs microservices in p
 
 * A report that includes the discussion part. It should also describe the design part and the steps to deploy and execute it.
 * An audible video of about 4 minutes showing the deployment and execution of the voting system.
-* An audible video of about 5 minutes showing the deployment and execution of the design part showing samples from the results.
-* A GitHub link includes the scripts of the design part.
+* An audible video of about 4 minutes showing the deployment and execution of the design part.
+* The scripts of the design part.
