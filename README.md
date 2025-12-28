@@ -151,6 +151,18 @@ This subsection will go through the Python script at [voting_logger/main.py](vot
       docker push $LOGGER_IMAGE
       ```
       **Note**: The prefix of the image name is the path into which the repository is to be pushed.
+      **Note**: if you face issues at this step [specifically refused], You can try these changes to fix the issue:
+      a- Head to the IAM panel in the IAM & Admin of your project. Find you account [Shows your email address] and add these 2 roles to your account: Cloud Build Editor - Artifact Registery Writer.
+
+      <img width="717" height="456" alt="image" src="https://github.com/user-attachments/assets/0bf2dce2-eaec-4b30-a474-bc37083f8197" />
+  
+      <img width="654" height="742" alt="image" src="https://github.com/user-attachments/assets/d1f9fe50-6208-4be7-a391-fec6b0c8e8f4" />
+
+
+      b- Use this command instead:
+      ``` cmd
+      gcloud builds submit   --tag northamerica-northeast2-docker.pkg.dev/crafty-valve-482322-m5/sofe4630u/logger:latest.
+      ```
       
 4. Deploy the voting logger service and the Redis server using GKE:
    1. the [voting_logger/logger.yaml](voting_logger/logger.yaml) file contains the deployment instructions. It can be divided into
