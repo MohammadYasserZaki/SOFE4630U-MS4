@@ -264,7 +264,7 @@ The Python script of the service can be found at [voting_record/main.py](voting_
    3. To create and push the Docker image to the repository.
        ``` cmd
       REPO=<REPO full path>
-      POSTGRES_IMAGE=$REPO/postgres:election
+      POSTGRES_IMAGE=gcr.io/$REPO/postgres:election
       echo $POSTGRES_IMAGE
   
       cd ~/SOFE4630U-MS4/voting_record/postgres
