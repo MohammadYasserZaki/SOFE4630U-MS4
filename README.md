@@ -234,7 +234,7 @@ The Python script of the service can be found at [voting_record/main.py](voting_
    2. Run the following commands after replacing **&lt;REPO full path&gt;** with the <a href="#sofe4630u"> repository full path</a> to generate the full name of the service image.
       ``` cmd
       REPO=<REPO full path>
-      RECORDER_IMAGE=$REPO/recorder
+      RECORDER_IMAGE=gcr.io/$REPO/recorder
       echo $RECORDER_IMAGE
       ```
    3. Make sure that the path **~/SOFE4630U-MS4/voting_record** contains the JSON file of the GCP credential, the main.py script, and the Dockerfile.
