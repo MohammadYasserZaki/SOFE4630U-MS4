@@ -159,9 +159,9 @@ This subsection will go through the Python script at [voting_logger/main.py](vot
       <img width="654" height="742" alt="image" src="https://github.com/user-attachments/assets/d1f9fe50-6208-4be7-a391-fec6b0c8e8f4" />
 
 
-      b- Use this command instead:
+      b- Use this command instead [don't forget to place your Project ID in the command]:
       ``` cmd
-      gcloud builds submit   --tag northamerica-northeast2-docker.pkg.dev/crafty-valve-482322-m5/sofe4630u/logger:latest.
+      gcloud builds submit   --tag northamerica-northeast2-docker.pkg.dev/  <Project ID>  /sofe4630u/logger:latest.
       ```
       
 4. Deploy the voting logger service and the Redis server using GKE:
