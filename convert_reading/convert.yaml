@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert-reading
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: convert-reading
+  template:
+    metadata:
+      labels:
+        app: convert-reading
+    spec:
+      containers:
+      - name: convert-reading
+        image: $CONVERT_IMAGE
+        env:
+        - name: GCP_PROJECT
+          value: "$PROJECT"
+        - name: CONVERT_SUB_ID
+          value: "convert-reading-sub"
+        - name: TOPIC_NAME
+          value: "smartmeter"
+        - name: Debug
+          value: "True"

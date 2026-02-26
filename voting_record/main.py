@@ -3,47 +3,47 @@ import os                               # for setting and reading environment va
 from google.cloud import pubsub_v1      # pip install google-cloud-pubsub  ##to install
 import psycopg2                          # pip install psycopg2   ##to install postgreSQL client
 import time                             # for sleep function
-import json;                            # to deal with json objects
-import sys;                             # fot exit function
+import json                             # to deal with json objects
+import sys                              # fot exit function
 
 # Search the current directory for the JSON file (including the Google Pub/Sub credential) 
 # to set the GOOGLE_APPLICATION_CREDENTIALS environment variable.
 files=glob.glob("*.json")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=files[0];
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=files[0]
 
 # Get the environment variables to set the crossponding variables
-postgres_host = os.environ["POSTGRES_HOST"];
-project_id = os.environ["GCP_PROJECT"];
-subscription_id = os.environ["ELECTION_SUB_ID"];
-topic_name = os.environ["TOPIC_NAME"];
+postgres_host = os.environ["POSTGRES_HOST"]
+project_id = os.environ["GCP_PROJECT"]
+subscription_id = os.environ["ELECTION_SUB_ID"]
+topic_name = os.environ["TOPIC_NAME"]
 
-debug=False;  # change to True for debugging
+debug=False  # change to True for debugging
 if "Debug" in os.environ:  # or define it as an environment variable
-    debug=True;
+    debug=True
 if debug:
-    print(files[0]);
-    print(postgres_host);
-    print(project_id);
-    print(subscription_id);
-    print(topic_name);
+    print(files[0])
+    print(postgres_host)
+    print(project_id)
+    print(subscription_id)
+    print(topic_name)
 
 # Try to connect to the PostgreSQL server. If the connection is not established, the service will end.
-c=0;
+c=0
 while True:
     try:
-        conn = psycopg2.connect(database = "election", 
-                user = "admin", 
+        conn = psycopg2.connect(database = "election",
+                user = "admin",
                 host= postgres_host,
                 password = "adminpassword",
                 port = 5432)
-        print('Successfully connected to POSTGRES server');
-        break;
+        print('Successfully connected to POSTGRES server')
+        break
     except:
-        print('Waiting for POSTGRES server');
-        time.sleep(10);
-        c=c+1;
+        print('Waiting for POSTGRES server')
+        time.sleep(10)
+        c=c+1
         if c>=60:
-            sys.exit(0);
+            sys.exit(0)
 # Each SQL statement is executed in its own transaction with an implicit commit
 conn.autocommit = True
 
@@ -56,11 +56,11 @@ def callback(message: pubsub_v1.subscriber.message.Message) -> None:
     # Make sure that the global variables are accessed from within the function.
     global conn, publisher, topic_path
     # get the message content
-    message_data = json.loads(message.data);
-    
+    message_data = json.loads(message.data)
+
     if debug:
         print(f"Received {message_data}.")
-    
+
     # record the vote in PostgreSQL
     mycursor = conn.cursor()
 
@@ -69,14 +69,14 @@ def callback(message: pubsub_v1.subscriber.message.Message) -> None:
     mycursor.execute(sql, val)
 
     conn.commit()
-    
+
     # A "successful" message is produced associated with attributes (function="result", machineID)
     value={'result': 'successful','UUID': message_data['UUID']}
-    
+
     if debug:
         print(f"Sending {str(value)}.")
-        
-    future = publisher.publish(topic_path, json.dumps(value).encode('utf-8'),function="result",machineID=str(message_data['machine_ID']));
+
+    future = publisher.publish(topic_path, json.dumps(value).encode('utf-8'),function="result",machineID=str(message_data['machine_ID']))
     
     # Report To Google Pub/Sub the successful processed of the received messages.
     message.ack()
@@ -95,7 +95,7 @@ with subscriber:
                 request={"name": subscription_path, "topic": topic_path, "filter": sub_filter}
             )
     except:
-        pass;
+        pass
         
     # Now, the subscription is already existing or has been created. 
     # The call back function will be called for each message match the filter from the topic.
